@@ -1,6 +1,5 @@
 # Copier template configuration for DDD Microservice
 _templates_suffix: .jinja
-_subdirectory: template
 
 # Questions for project generation
 app_name:
