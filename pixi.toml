@@ -1,0 +1,10 @@
+[workspace]
+authors = ["sujie <13156660820@163.com>"]
+channels = ["conda-forge"]
+name = "msvc_copier_template"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
