@@ -1,0 +1,14 @@
+package {{group_id}};
+
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+
+/**
+ * @author sujie
+ * @since 1.0.0
+ */
+@AutoConfigureMockMvc
+@SpringBootTest(classes = {{start_id}}.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public abstract class Abstract{{start_id}}Test {
+
+}

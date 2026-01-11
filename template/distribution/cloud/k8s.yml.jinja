@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{app_name}}
+  name: {{app_name}}
+  namespace: {{ns}}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{app_name}}
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{app_name}}
+    spec:
+      imagePullSecrets:
+        - name: aliyun-docker-hub
+      containers:
+        - image: registry.cn-shanghai.aliyuncs.com/{{ns}}/{{app_name}}:v1.0.0
+          readinessProbe:
+            httpGet:
+              path: {{servlet_context_path}}/actuator/health
+              port: {{app_port}}
+            initialDelaySeconds: 180
+            timeoutSeconds: 5
+            failureThreshold: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: {{servlet_context_path}}/actuator/health
+              port: {{app_port}}
+            initialDelaySeconds: 180
+            timeoutSeconds: 5
+            failureThreshold: 10
+            periodSeconds: 10
+          imagePullPolicy: Always
+          name: {{app_name}}
+          ports:
+            - containerPort: {{app_port}}
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 300m
+              memory: 600Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /{{app_name}}/logs/
+              name: app-logs-vmount
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: app-logs-vmount
+          persistentVolumeClaim:
+            claimName: app-logs-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{app_name}}
+  name: {{app_name}}
+  namespace: {{ns}}
+spec:
+  ports:
+    - name: http
+      port: {{app_port}}
+      protocol: TCP
+      targetPort: {{app_port}}
+  selector:
+    app: {{app_name}}
+  sessionAffinity: None
+  type: ClusterIP

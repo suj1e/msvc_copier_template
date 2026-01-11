@@ -1,0 +1,27 @@
+logging:
+  level:
+    sql: DEBUG
+    com.alibaba.nacos: OFF # nacos 心跳日志屏蔽
+    org.springframework.boot: DEBUG
+    root: INFO
+    org.flooc.cox: TRACE
+    {{group_id}}: DEBUG
+  # structured:
+    # format:
+      # file: ecs
+  file:
+    name: ./logs/${spring.application.name}/app-dev.log
+spring:
+  cloud:
+    nacos:
+      username: @nacos.username@
+      password: @nacos.password@
+      discovery:
+        server-addr: @nacos.url@ # 如果nacos sever配置的是30884，那么grpc对应的9848端口必须是31884才能连接的上
+        namespace: ${app.startup.ns}-dev
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        namespace: ${spring.cloud.nacos.discovery.namespace}
+  config:
+    import:
+      - optional:nacos:${spring.application.name}-dev.yml

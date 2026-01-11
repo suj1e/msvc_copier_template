@@ -1,0 +1,25 @@
+name: {{app_name}}
+services:
+  {{app_name}}:
+    image: registry.cn-shanghai.aliyuncs.com/{{ns}}/{{app_name}}:v1.0.0
+    container_name: {{app_name}}
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ~/app/logs:/{{app_name}}/logs
+    ports:
+      - {{app_port}}:{{app_port}}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:{{app_port}}{{servlet_context_path}}/actuator/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+    expose:
+      - {{app_port}}
+    networks:
+      - flooc-nets
+networks:
+  flooc-nets:
+    name: flooc_default
+    # 自动创建，如果外部没有
+#    external: true

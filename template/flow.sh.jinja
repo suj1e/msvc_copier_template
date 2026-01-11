@@ -1,0 +1,45 @@
+#!/bin/bash
+
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 [option]"
+    echo "Available options:"
+    echo "  -p package"
+    echo "  -t test"
+    exit 1
+fi
+
+appName="{{app_name}}"
+# 获取第一个参数
+option="$1"
+pkgEnv="$2"
+start=$(date +%s)
+opMsg="package"
+
+# 根据参数执行不同操作
+case "$option" in
+    -p)
+        if [ -z "$pkgEnv" ]; then
+            pkgEnv="test-env"
+        fi
+        echo "$pkgEnv"
+        echo $opMsg
+        mvn clean
+        mvn -B clean package -Dmaven.test.skip=true -P${appName}-spring-boot-package -P${appName}-assembly-package -P"${pkgEnv}"
+        ;;
+    -t)
+        opMsg="test"
+        echo $opMsg
+        mvn -B clean test -Dmaven.test.failure.ignore=true -Psurefire-test
+        mvn surefire-report:report-only
+        ;;
+    *)
+        echo "无效的参数选项，请使用 -p或-a"
+        exit 1
+        ;;
+esac
+
+end=$(date +%s)
+
+elapsed=$((end - start))
+
+echo "Time taken to $opMsg $appName is $elapsed seconds"

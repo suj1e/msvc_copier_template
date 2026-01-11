@@ -1,0 +1,27 @@
+logging:
+  level:
+    sql: DEBUG
+    org.springframework.boot: DEBUG
+    root: INFO
+    org.flooc.cox: TRACE
+    {{group_id}}: DEBUG
+  # structured:
+    # format:
+      # file: ecs
+  file:
+    name: ./logs/${spring.application.name}/app-dev.log
+spring:
+  task:
+    execution:
+      pool:
+        core-size: 4
+        max-size: 50
+        queue-capacity: 10000
+    scheduling:
+      pool:
+        size: 2
+# leaf:
+#  snowflake:
+#    enable: true
+#    address: {{zkAddress}}
+#    port: ${server.port}

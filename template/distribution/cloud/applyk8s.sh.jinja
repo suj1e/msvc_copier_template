@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# 判断参数个数是否小于1，如果是则打印使用说明并退出
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 [option]"
+    echo "Available options:"
+    echo "  -a apply"
+    echo "  -r restart"
+    echo "  -d delete"
+    exit 1
+fi
+
+
+appName="{{app_name}}"
+deploymentNs="{{ns}}"
+deployFile="k8s.yml"
+# 获取第一个参数
+option="$1"
+
+
+# 根据参数执行不同操作
+case "$option" in
+    -a)
+        echo "apply"
+        kubectl apply -f ${deployFile}
+        ;;
+    -r)
+        echo "restart"
+        kubectl rollout restart deployment/${appName} -n ${deploymentNs}
+        ;;
+    -d)
+        echo "delete"
+        kubectl delete -f ${deployFile}
+        ;;
+    *)
+        echo "无效的参数选项，请使用 -a, -r或-d"
+        exit 1
+        ;;
+esac

@@ -1,0 +1,24 @@
+# 基础镜像jdk
+FROM dragonwell-registry.cn-hangzhou.cr.aliyuncs.com/dragonwell/dragonwell:21
+
+# 定义构建变量
+ARG APP_NAME={{app_name}}
+# docker exec -it container-name bash
+# workdir配置的是其镜像运行时的工作目录
+# 必须先声明工作目录，否则下面的复制会找不到工作目录
+# 可自定义名称
+WORKDIR /${APP_NAME}
+
+# target其实是：Dockerfile所在目录/target，也就是此处配置的是相对于Dockerfile的所在的目录的
+ARG JAR_FILE=../target/${APP_NAME}.jar
+
+# 复制target/${rootArtifactId}.jar至WORKDIR里同时将其命名为app.jar
+COPY ${JAR_FILE} app.jar
+
+EXPOSE {{app_port}}
+
+ENV TZ=Asia/Shanghai
+ENV JAVA_OPTS="-Xms512m -Xmx512m -XX:MaxMetaspaceSize=256m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=logs/${APP_NAME}/error/ -XX:+UseG1GC -Djava.security.egd=file:/dev/./urandom"
+
+# docker启动时实际执行的是这个命令，docker构建的镜像里包含了基础的jdk（上面的from），也就是在有了jdk的环境基础下，所以docker启动该镜像可以直接启动
+CMD sleep 8; java $JAVA_OPTS -jar app.jar

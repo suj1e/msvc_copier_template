@@ -1,0 +1,66 @@
+# Copier template configuration for DDD Microservice
+_templates_suffix: .jinja
+_subdirectory: template
+
+# Questions for project generation
+app_name:
+  type: str
+  help: What is your app name?
+  default: my-microservice
+
+group_id:
+  type: str
+  help: Maven group ID
+  default: com.example
+
+artifact_id:
+  type: str
+  help: Maven artifact ID
+  default: "{{ app_name }}"
+
+
+app_version:
+  type: str
+  help: App version
+  default: "1.0.0"
+  choices:
+    - "1.0.0-SNAPSHOT"
+    - "1.0.0"
+
+app_port:
+  type: str
+  help: App port
+  default: "10000"
+
+has_context_path:
+  type: bool
+  help: Has context path?
+  default: true
+
+servlet_context_path:
+  type: str
+  help: Servlet context path
+  default: "/"
+
+ns:
+  type: str
+  help: Namespace
+  default: "flooc-ns"
+
+start_id:
+  type: str
+  help: Start id
+
+jasypt_password:
+  type: str
+  help: jasyptPassword
+
+
+_jinja_extensions:
+  - jinja2_time.TimeExtension
+
+_tasks:
+  - "echo 'Project {{ artifact_id }} has been generated successfully!'"
+  - "echo 'Next steps:'"
+  - "echo '  1. cd {{ artifact_id }}'"
+  - "echo '  2. sh compile.sh -c'"

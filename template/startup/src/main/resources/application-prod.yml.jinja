@@ -1,0 +1,23 @@
+logging:
+  level:
+    root: ERROR
+  structured:
+    format:
+      file: ecs
+  file:
+    name: ./logs/${spring.application.name}/app-prod.log
+spring:
+  task:
+    execution:
+      pool:
+        core-size: 10
+        max-size: 100
+        queue-capacity: 20000
+    scheduling:
+      pool:
+        size: 2
+# leaf:
+#  snowflake:
+#    enable: true
+#    address: {{zkAddress}}
+#    port: ${server.port}

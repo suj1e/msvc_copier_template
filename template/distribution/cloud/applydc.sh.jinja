@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# 判断参数个数是否小于1，如果是则打印使用说明并退出
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 [option]"
+    echo "Available options:"
+    echo "  -a apply"
+    echo "  -r restart"
+    echo "  -s stop"
+    exit 1
+fi
+
+
+appName="{{app_name}}"
+appVersion="v1.0.0"
+deployFile="docker-compose.yml"
+registry="registry.cn-shanghai.aliyuncs.com/{{ns}}"
+# 获取第一个参数
+option="$1"
+
+
+# 根据参数执行不同操作
+case "$option" in
+    -a)
+        echo "apply"
+        docker-compose -f ${deployFile} up -d
+        ;;
+    -r)
+        echo "restart"
+        docker-compose -f ${deployFile} down --rmi all
+        sleep 2
+        docker-compose -f ${deployFile} up -d
+        ;;
+    -s)
+        echo "stop"
+        docker-compose -f ${deployFile} down
+        ;;
+    *)
+        echo "无效的参数选项，请使用 -a, -r或-d"
+        exit 1
+        ;;
+esac

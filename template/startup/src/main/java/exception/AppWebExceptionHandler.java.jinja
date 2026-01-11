@@ -1,0 +1,17 @@
+package {{group_id}}.exception;
+
+import org.flooc.cox.app.exception.AbstractWebExceptionHandler;
+import org.flooc.cox.app.logging.AppLogging;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+/**
+ * 注意先后捕获顺序
+ *
+ * @author sujie
+ * @since 1.0.0
+ */
+@AppLogging(enable = false)
+@RestControllerAdvice("{{group_id}}.presentation")
+public class AppWebExceptionHandler extends AbstractWebExceptionHandler {
+
+}

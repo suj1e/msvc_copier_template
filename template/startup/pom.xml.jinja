@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>{{group_id}}</groupId>
+        <artifactId>{{artifact_id}}</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <packaging>jar</packaging>
+    <artifactId>{{artifact_id}}-startup</artifactId>
+    <name>${project.artifactId} ${project.version}</name>
+
+
+    <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+        <maven.install.skip>true</maven.install.skip>
+        <maven.test.skip>false</maven.test.skip>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>{{group_id}}</groupId>
+            <artifactId>{{artifact_id}}-presentation</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>{{group_id}}</groupId>
+            <artifactId>{{artifact_id}}-dubbo-provider</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>{{group_id}}</groupId>
+            <artifactId>{{artifact_id}}-infrastructure</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>com.alibaba.nacos</groupId>-->
+<!--                    <artifactId>logback-adapter</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.flooc.cox</groupId>
+            <artifactId>cox-starter-startup</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+
+    <profiles>
+        <profile>
+            <id>{{app_name}}-spring-boot-package</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <finalName>{{app_name}}</finalName>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <attach>false</attach>
+                            <mainClass>{{group_id}}.{{start_id}}</mainClass>
+                            <!--这是默认值，创建一个包含所有依赖项的可执行zip格式的jar包，即所谓的"fat jar"或"uber-jar"-->
+                            <layout>ZIP</layout>
+                            <!--运行阶段不需要的jar(比如lombok这种工具jar，仅在编译阶段需要)不需要打包进去-->
+                            <excludes>
+                                <exclude>
+                                    <groupId>org.projectlombok</groupId>
+                                    <artifactId>lombok</artifactId>
+                                </exclude>
+                                <exclude>
+                                    <groupId>org.mapstruct</groupId>
+                                    <artifactId>mapstruct</artifactId>
+                                </exclude>
+                            </excludes>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>repackage</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <!-- 替换配置文件中@xx@ -->
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+
+        <profile>
+            <id>dev-env</id>
+            <properties>
+                <profiles.active>dev</profiles.active>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>test-env</id>
+            <properties>
+                <profiles.active>test</profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>staging-env</id>
+            <properties>
+                <profiles.active>staging</profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>gray-env</id>
+            <properties>
+                <profiles.active>gray</profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod-env</id>
+            <properties>
+                <profiles.active>prod</profiles.active>
+            </properties>
+        </profile>
+        <!-- cloud env -->
+        <profile>
+            <!-- 开发环境 -->
+            <id>cloud-dev-env</id>
+            <properties>
+                <profiles.active>cloud-dev</profiles.active>
+                <nacos.url>120.55.165.115:8848</nacos.url>
+                <nacos.username>nacos</nacos.username>
+                <nacos.password>ENC(qNFUF8WKdUoBDeGfhtz9lQ==)</nacos.password>
+            </properties>
+        </profile>
+        <profile>
+            <!-- 测试环境 -->
+            <id>cloud-test-env</id>
+            <properties>
+                <profiles.active>cloud-test</profiles.active>
+                <nacos.url>nacos-server:8848</nacos.url>
+                <nacos.username>nacos</nacos.username>
+                <nacos.password>ENC(qNFUF8WKdUoBDeGfhtz9lQ==)</nacos.password>
+            </properties>
+        </profile>
+        <profile>
+            <!-- 预发布环境 -->
+            <id>cloud-staging-env</id>
+            <properties>
+                <profiles.active>cloud-staging</profiles.active>
+                <nacos.url>infra-nacos.infrastructure:8848</nacos.url>
+                <nacos.username>nacos</nacos.username>
+                <nacos.password>ENC(qNFUF8WKdUoBDeGfhtz9lQ==)</nacos.password>
+            </properties>
+        </profile>
+        <profile>
+            <!-- 灰度环境 -->
+            <id>cloud-gray-env</id>
+            <properties>
+                <profiles.active>cloud-gray</profiles.active>
+                <nacos.url>infra-nacos.infrastructure:8848</nacos.url>
+                <nacos.username>nacos</nacos.username>
+                <nacos.password>ENC(qNFUF8WKdUoBDeGfhtz9lQ==)</nacos.password>
+            </properties>
+        </profile>
+        <profile>
+            <!-- 生产环境 -->
+            <id>cloud-prod-env</id>
+            <properties>
+                <profiles.active>cloud-prod</profiles.active>
+                <nacos.url>infra-nacos.infrastructure:8848</nacos.url>
+                <nacos.username>nacos</nacos.username>
+                <nacos.password>ENC(qNFUF8WKdUoBDeGfhtz9lQ==)</nacos.password>
+            </properties>
+        </profile>
+    </profiles>
+
+</project>
