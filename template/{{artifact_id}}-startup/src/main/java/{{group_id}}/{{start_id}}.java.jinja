@@ -1,0 +1,44 @@
+package {{group_id}};
+
+{% if enable_bizlog -%}
+import com.mzt.logapi.starter.annotation.EnableLogRecord;
+{% endif -%}
+{% if enable_jpa -%}
+import com.tencent.devops.leaf.plugin.annotation.EnableLeafServer;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+{% endif -%}
+{% if enable_dynamictp -%}
+import org.dromara.dynamictp.spring.annotation.EnableDynamicTp;
+{% endif -%}
+{% if enable_cloud -%}
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+{% endif -%}
+import org.flooc.cox.app.logging.EnableAppLogging;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
+
+
+{% if enable_bizlog -%}
+@EnableLogRecord(tenant = "${spring.application.name}")
+{% endif -%}
+{% if enable_dynamictp -%}
+@EnableDynamicTp
+{% endif -%}
+{% if enable_cloud -%}
+@EnableDiscoveryClient
+{% endif -%}
+{% if enable_jpa -%}
+@EnableLeafServer
+@EnableJpaAuditing
+{% endif -%}
+@EnableAppLogging
+@EnableAsync
+@SpringBootApplication
+public class {{start_id}} {
+
+  public static void main(String[] args) {
+    SpringApplication.run({{start_id}}.class, args);
+  }
+
+}

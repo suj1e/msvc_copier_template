@@ -1,0 +1,9 @@
+{% if enable_jpa -%}
+@QueryEntities(AbstractAuditingEntity.class)
+{% endif -%}
+package {{group_id}}.domain;
+
+{% if enable_jpa -%}
+import com.querydsl.core.annotations.QueryEntities;
+import org.flooc.cox.data.jpa.support.AbstractAuditingEntity;
+{% endif -%}

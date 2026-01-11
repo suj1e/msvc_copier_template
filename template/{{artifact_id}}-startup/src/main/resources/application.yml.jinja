@@ -1,12 +1,14 @@
+server:
+  port: {{app_port}}
+  {% if has_context_path %}
+  servlet:
+    context-path: {{servlet_context_path}}
+  {% endif %}
+
 app:
   startup:
     ns: {{ns}}
-server:
-  port: {{app_port}}
-  {% if has_context_path -%}
-  servlet:
-    context-path: {{servlet_context_path}}
-  {% endif -%}
+
 management:
   endpoint:
     health:

@@ -25,11 +25,13 @@
       <artifactId>{{artifact_id}}-domain</artifactId>
       <version>${project.version}</version>
     </dependency>
-<!--    <dependency>-->
-<!--      <groupId>mysql</groupId>-->
-<!--      <artifactId>mysql-connector-java</artifactId>-->
-<!--      <scope>runtime</scope>-->
-<!--    </dependency>-->
+    {% if enable_jpa -%}
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    {% endif -%}
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>

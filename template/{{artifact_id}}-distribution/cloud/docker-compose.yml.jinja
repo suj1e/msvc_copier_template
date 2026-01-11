@@ -10,7 +10,11 @@ services:
     ports:
       - {{app_port}}:{{app_port}}
     healthcheck:
+      {% if has_context_path -%}
       test: ["CMD", "curl", "-f", "http://localhost:{{app_port}}{{servlet_context_path}}/actuator/health"]
+      {% else -%}
+      test: ["CMD", "curl", "-f", "http://localhost:{{app_port}}/actuator/health"]
+      {% endif -%}
       interval: 30s
       timeout: 3s
       retries: 3

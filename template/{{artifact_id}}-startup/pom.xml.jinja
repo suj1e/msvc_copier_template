@@ -40,20 +40,22 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>-->
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <groupId>com.alibaba.nacos</groupId>-->
-<!--                    <artifactId>logback-adapter</artifactId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>-->
-<!--        </dependency>-->
+        {% if enable_cloud -%}
+        <dependency>
+          <groupId>com.alibaba.cloud</groupId>
+          <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+            <exclusions>
+              <exclusion>
+              <groupId>com.alibaba.nacos</groupId>
+              <artifactId>logback-adapter</artifactId>
+            </exclusion>
+          </exclusions>
+        </dependency>
+        <dependency>
+          <groupId>com.alibaba.cloud</groupId>
+          <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        {% endif -%}
         <dependency>
             <groupId>org.flooc.cox</groupId>
             <artifactId>cox-starter-startup</artifactId>
@@ -124,9 +126,11 @@
             <properties>
                 <profiles.active>dev</profiles.active>
             </properties>
+            {% if not enable_cloud -%}
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+            {% endif %}
         </profile>
         <profile>
             <id>test-env</id>
@@ -162,6 +166,11 @@
                 <nacos.username>nacos</nacos.username>
                 <nacos.password>ENC(qNFUF8WKdUoBDeGfhtz9lQ==)</nacos.password>
             </properties>
+            {% if enable_cloud -%}
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            {% endif %}
         </profile>
         <profile>
             <!-- 测试环境 -->

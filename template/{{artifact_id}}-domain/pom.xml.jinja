@@ -20,10 +20,42 @@
   </properties>
 
   <dependencies>
-<!--    <dependency>-->
-<!--      <groupId>org.flooc.cox</groupId>-->
-<!--      <artifactId>cox-starter-data-jpa</artifactId>-->
-<!--    </dependency>-->
+    {% if enable_jpa -%}
+    <dependency>
+      <groupId>org.flooc.cox</groupId>
+      <artifactId>cox-starter-data-jpa</artifactId>
+    </dependency>
+    {% endif -%}
+    {% if enable_es -%}
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+    </dependency>
+    {% endif -%}
+    {% if enable_redis -%}
+    <dependency>
+      <groupId>org.redisson</groupId>
+      <artifactId>redisson-spring-boot-starter</artifactId>
+    </dependency>
+    {% endif -%}
+    {% if enable_kafka -%}
+    <dependency>
+      <groupId>org.flooc.cox</groupId>
+      <artifactId>cox-starter-mq-kafka</artifactId>
+    </dependency>
+    {% endif -%}
+    {% if enable_dynamictp -%}
+    <dependency>
+      <groupId>org.dromara.dynamictp</groupId>
+      <artifactId>dynamic-tp-spring-cloud-starter-nacos</artifactId>
+    </dependency>
+    {% endif -%}
+    {% if enable_bizlog -%}
+    <dependency>
+      <groupId>io.github.mouzt</groupId>
+      <artifactId>bizlog-sdk</artifactId>
+    </dependency>
+    {% endif -%}
     <dependency>
       <groupId>org.flooc.cox</groupId>
       <artifactId>cox-common</artifactId>
@@ -72,29 +104,31 @@
           </annotationProcessorPaths>
         </configuration>
       </plugin>
-<!--      <plugin>-->
-<!--        <groupId>com.mysema.maven</groupId>-->
-<!--        <artifactId>apt-maven-plugin</artifactId>-->
-<!--        <executions>-->
-<!--          <execution>-->
-<!--            <goals>-->
-<!--              <goal>process</goal>-->
-<!--            </goals>-->
-<!--            <configuration>-->
-<!--              <outputDirectory>target/generated-sources/java</outputDirectory>-->
-<!--              <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>-->
-<!--            </configuration>-->
-<!--          </execution>-->
-<!--        </executions>-->
-<!--        <dependencies>-->
-<!--          <dependency>-->
-<!--            <groupId>com.querydsl</groupId>-->
-<!--            <artifactId>querydsl-apt</artifactId>-->
-<!--            <classifier>jakarta</classifier>-->
-<!--            <version>${querydsl.version}</version>-->
-<!--          </dependency>-->
-<!--        </dependencies>-->
-<!--      </plugin>-->
+      {% if enable_jpa -%}
+      <plugin>
+        <groupId>com.mysema.maven</groupId>
+        <artifactId>apt-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>process</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>target/generated-sources/java</outputDirectory>
+              <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+            </configuration>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+            <classifier>jakarta</classifier>
+            <version>${querydsl.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      {% endif -%}
     </plugins>
   </build>
 

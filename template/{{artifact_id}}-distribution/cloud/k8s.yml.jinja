@@ -27,7 +27,11 @@ spec:
         - image: registry.cn-shanghai.aliyuncs.com/{{ns}}/{{app_name}}:v1.0.0
           readinessProbe:
             httpGet:
+              {% if has_context_path -%}
               path: {{servlet_context_path}}/actuator/health
+              {% else -%}
+              path: /actuator/health
+              {% endif -%}
               port: {{app_port}}
             initialDelaySeconds: 180
             timeoutSeconds: 5
@@ -35,7 +39,11 @@ spec:
             periodSeconds: 10
           livenessProbe:
             httpGet:
+              {% if has_context_path -%}
               path: {{servlet_context_path}}/actuator/health
+              {% else -%}
+              path: /actuator/health
+              {% endif -%}
               port: {{app_port}}
             initialDelaySeconds: 180
             timeoutSeconds: 5

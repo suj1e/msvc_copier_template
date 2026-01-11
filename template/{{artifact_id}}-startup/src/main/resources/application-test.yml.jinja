@@ -1,11 +1,11 @@
 logging:
   level:
-    root: ERROR
-  structured:
-    format:
-      file: ecs
+    root: INFO
+#  structured:
+#    format:
+#      file: ecs
   file:
-    name: ./logs/${spring.application.name}/app-staging.log
+    name: ./logs/${spring.application.name}/app-test.log
 spring:
   task:
     execution:
@@ -19,5 +19,5 @@ spring:
 # leaf:
 #  snowflake:
 #    enable: true
-#    address: {{zkAddress}}
+#    address: {{zk_address}}
 #    port: ${server.port}

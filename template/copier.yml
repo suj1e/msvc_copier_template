@@ -31,6 +31,11 @@ app_port:
   help: App port
   default: "10000"
 
+zk_address:
+  type: str
+  help: Zookeeper address?
+  default: ""
+
 has_context_path:
   type: bool
   help: Has context path?
@@ -54,9 +59,32 @@ jasypt_password:
   type: str
   help: jasyptPassword
 
+enable_jpa:
+  type: bool
+  help: Enable Jpa?
+  default: false
 
-_jinja_extensions:
-  - jinja2_time.TimeExtension
+enable_es:
+  type: bool
+  help: Enable ES?
+  default: false
+
+enable_redis:
+  type: bool
+  help: Enable Redis?
+  default: false
+
+enable_kafka:
+  type: bool
+  help: Enable Kafka?
+  default: false
+
+enable_bizlog:
+  type: bool
+  help: Enable BizLog?
+  default: false
+
+
 
 _tasks:
   - "echo 'Project {{ artifact_id }} has been generated successfully!'"
