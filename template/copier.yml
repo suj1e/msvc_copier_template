@@ -84,6 +84,15 @@ enable_bizlog:
   help: Enable BizLog?
   default: false
 
+enable_cloud:
+  type: bool
+  help: Enable Cloud?
+  default: false
+
+enable_dynamictp:
+  type: bool
+  help: Enable dynamictp?
+  default: false
 
 
 _tasks:
